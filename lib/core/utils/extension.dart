@@ -21,6 +21,11 @@ extension DateFormatting on String {
   }
 }
 
+extension DateTimeExt on DateTime {
+  String get formattedDate =>
+      DateFormat('d MMMM yyyy').format(this);
+}
+
 extension StringExt on String {
   String capitalize() {
     if (isEmpty) return "";

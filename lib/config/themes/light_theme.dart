@@ -50,14 +50,14 @@ ElevatedButtonThemeData _elevatedButtonThemeData = ElevatedButtonThemeData(
       Set<WidgetState> states,
     ) {
       if (states.contains(WidgetState.pressed)) {
-        return BaseColor.softBlue;
+        return BaseColor.blue;
       }
 
       if (states.contains(WidgetState.disabled)) {
         return BaseColor.disable;
       }
 
-      return BaseColor.softBlue; // Use the component's default.
+      return BaseColor.blue; // Use the component's default.
     }),
     overlayColor: WidgetStateProperty.resolveWith<Color>((
       Set<WidgetState> states,
@@ -258,14 +258,14 @@ BottomNavigationBarThemeData _bottomNavigationBarThemeData =
     BottomNavigationBarThemeData(
   backgroundColor: BaseColor.white,
   type: BottomNavigationBarType.fixed,
-  selectedItemColor: BaseColor.softBlue,
-  selectedLabelStyle: GoogleFonts.figtree(
+  selectedItemColor: BaseColor.blue,
+  selectedLabelStyle: GoogleFonts.poppins(
     color: BaseColor.softBlue,
     fontSize: 14,
     fontWeight: FontWeight.w400,
   ),
   unselectedItemColor: BaseColor.unSelect,
-  unselectedLabelStyle: GoogleFonts.figtree(
+  unselectedLabelStyle: GoogleFonts.poppins(
     color: BaseColor.grey2,
     fontSize: 14,
     fontWeight: FontWeight.w400,

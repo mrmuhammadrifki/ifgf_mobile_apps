@@ -3,56 +3,68 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 
 extension TextExtension on Text {
-  Text dm28sb() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 28, fontWeight: FontWeight.w600),
-  );
+  Text p28sb() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.w600),
+      );
 
-  Text dm24sb() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 24, fontWeight: FontWeight.w600),
-  );
+  Text p24sb() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w600),
+      );
 
-  Text dm20b() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 20, fontWeight: FontWeight.w700),
-  );
+  Text p24m() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w500),
+      );
 
-  Text dm18b() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.w700),
-  );
+  Text p20b() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w700),
+      );
 
-  Text dm18sm() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.w600),
-  );
+  Text p18b() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w700),
+      );
 
-  Text dm16sb() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 16, fontWeight: FontWeight.w600),
-  );
+  Text p18sm() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600),
+      );
 
-  Text dm16m() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 16, fontWeight: FontWeight.w500),
-  );
+  Text p18m() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500),
+      );
 
-  Text dm16r() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 16, fontWeight: FontWeight.w400),
-  );
+  Text p18r() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w400),
+      );
 
-  Text dm15r() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.w400),
-  );
+  Text p16sb() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
+      );
 
-  Text dm14sb() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w600),
-  );
+  Text p16m() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
+      );
 
-  Text dm14m() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w500),
-  );
+  Text p16r() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w400),
+      );
 
-  Text dm14r() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w400),
-  );
-  Text dm12r() => copyWith(
-    style: GoogleFonts.dmSans(fontSize: 12, fontWeight: FontWeight.w400),
-  );
+  Text p15r() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400),
+      );
+
+  Text p14sb() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600),
+      );
+
+  Text p14m() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
+      );
+
+  Text p14r() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400),
+      );
+  Text p12r() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400),
+      );
 
   Text maxLines1() => copyWith(maxLines: 1);
 
@@ -67,6 +79,7 @@ extension TextExtension on Text {
   Text grey2() => copyWith(style: const TextStyle(color: BaseColor.grey2));
   Text softBlue() =>
       copyWith(style: const TextStyle(color: BaseColor.softBlue));
+  Text blue() => copyWith(style: const TextStyle(color: BaseColor.blue));
   Text orange() => copyWith(style: const TextStyle(color: BaseColor.orange));
   Text red() => copyWith(style: const TextStyle(color: BaseColor.danger));
 
