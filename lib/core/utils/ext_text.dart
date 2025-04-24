@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 
 extension TextExtension on Text {
+   Text p32m() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 32, fontWeight: FontWeight.w500),
+      );
   Text p28sb() => copyWith(
         style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.w600),
       );

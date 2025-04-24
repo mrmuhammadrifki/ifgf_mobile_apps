@@ -90,9 +90,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: _buildMenuItem(
-                          title: "Keuangan",
-                          icon: AssetsIcon.money,
+                        child: InkWell(
+                          onTap: _onGoToKeuangan,
+                          child: _buildMenuItem(
+                            title: "Keuangan",
+                            icon: AssetsIcon.money,
+                          ),
                         ),
                       ),
                       SizedBox(width: 8),
@@ -113,11 +116,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _onGoToKeuangan() {
+    context.push(RoutePath.keuangan);
+  }
+
   void _onGoToAcara() {
     context.push(RoutePath.acara);
   }
 
-   void _onGoToJadwal() {
+  void _onGoToJadwal() {
     context.push(RoutePath.jadwal);
   }
 

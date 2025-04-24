@@ -10,4 +10,6 @@ base class RoutePath {
   static const String createSuperSunday = '/createSuperSunday';
   static const String createIcare = '/createIcare';
   static const String createDiscipleshipJourney = '/createDiscipleshipJourney';
+  static const String keuangan = '/keuangan';
+    static const String createTrx = '/createTrx';
 }

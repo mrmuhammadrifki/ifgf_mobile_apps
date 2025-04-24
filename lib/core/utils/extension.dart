@@ -2,6 +2,15 @@ import 'package:ifgf_apps/core/utils/regex.dart';
 import 'package:intl/intl.dart';
 
 extension DateFormatting on String {
+  String get formattedMonthYear {
+    try {
+      DateTime dateTime = DateTime.parse(this);
+      return DateFormat('MMMM yyyy', 'id_ID').format(dateTime);
+    } catch (e) {
+      return this;
+    }
+  }
+
   String get formattedDate {
     try {
       DateTime dateTime = DateTime.parse(this);

@@ -11,9 +11,11 @@ import 'package:ifgf_apps/presentation/pages/create_icare/create_icare.dart';
 import 'package:ifgf_apps/presentation/pages/create_icare/create_icare_provider/create_icare_provider.dart';
 import 'package:ifgf_apps/presentation/pages/create_super_sunday/create_super_sunday.dart';
 import 'package:ifgf_apps/presentation/pages/create_super_sunday/create_super_sunday_provider/create_super_sunday_provider.dart';
+import 'package:ifgf_apps/presentation/pages/create_trx/create_trx_screen.dart';
 import 'package:ifgf_apps/presentation/pages/detail_jadwal/detail_jadwal.dart';
 import 'package:ifgf_apps/presentation/pages/home/home_screen.dart';
 import 'package:ifgf_apps/presentation/pages/jadwal/jadwal_screen.dart';
+import 'package:ifgf_apps/presentation/pages/keuangan/keuangan_page.dart';
 import 'package:ifgf_apps/presentation/pages/login/login_screen.dart';
 import 'package:ifgf_apps/presentation/pages/profile/profile_screen.dart';
 import 'package:ifgf_apps/presentation/pages/register/register_screen.dart';
@@ -173,6 +175,19 @@ class Navigation {
           ),
           state: state,
         );
+      },
+    ),
+    GoRoute(
+      path: RoutePath.keuangan,
+      pageBuilder: (context, GoRouterState state) {
+        return _getPage(child: KeuanganPage(), state: state);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.createTrx,
+      pageBuilder: (context, GoRouterState state) {
+        final isEdit = state.extra as bool? ?? false;
+        return _getPage(child: CreateTrxScreen(isEdit: isEdit), state: state);
       },
     ),
   ];

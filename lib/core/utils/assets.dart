@@ -20,6 +20,11 @@ base class AssetsIcon {
   static const String locationBlack = "assets/icons/ic_location_black.svg";
   static const String camera = "assets/icons/ic_camera_outline.svg";
   static const String category = "assets/icons/ic_category.svg";
+  static const String arrowDownGreen = "assets/icons/ic_arrow_down_green.svg";
+  static const String arrowUpDanger = "assets/icons/ic_arrow_up_danger.svg";
+  static const String edit = "assets/icons/ic_edit.svg";
+  static const String delete = "assets/icons/ic_delete.svg";
+    static const String moneyBlack = "assets/icons/ic_money_black.svg";
 }
 
 base class AssetsImage {

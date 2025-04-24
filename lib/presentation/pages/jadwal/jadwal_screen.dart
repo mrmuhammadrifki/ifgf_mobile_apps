@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ifgf_apps/config/routes/route_path.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
