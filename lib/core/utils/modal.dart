@@ -1,8 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/enum.dart';
+import 'package:ifgf_apps/core/utils/ext_text.dart';
 
 base class Modal {
+  static Future<bool?> showConfirmationDialog(
+    BuildContext context, {
+    required String title,
+    required String message,
+    String confirmText = 'Hapus',
+    String cancelText = 'Batal',
+  }) {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Text(title).p20m().black2(),
+          content: Text(message).p12r(),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              style: TextButton.styleFrom(
+                foregroundColor: BaseColor.blue,
+              ),
+              child: Text(cancelText),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: BaseColor.red,
+                foregroundColor: BaseColor.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(confirmText),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static Future<void> showLoadingDialog(
     BuildContext context,
     GlobalKey key,

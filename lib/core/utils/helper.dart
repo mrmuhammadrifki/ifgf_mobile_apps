@@ -1,4 +1,6 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/extension.dart';
 
 class Helper {
@@ -9,13 +11,92 @@ class Helper {
   static double heightScreen(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
-  
+
   static void get closeKeyboard =>
       FocusManager.instance.primaryFocus?.unfocus();
 
   static bool detectScrolledToEnd(ScrollController scrollController) {
     return scrollController.position.pixels >=
         scrollController.position.maxScrollExtent - 48;
+  }
+
+  static Future<void> showCalendarPickerHelper({
+    required BuildContext context,
+    required List<DateTime?> initialDates,
+    required void Function(List<DateTime?> selectedDates) onDateSelected,
+  }) async {
+    final result = await showCalendarDatePicker2Dialog(
+      context: context,
+      config: CalendarDatePicker2WithActionButtonsConfig(
+        selectedDayHighlightColor: BaseColor.blue,
+        daySplashColor: BaseColor.softBlue,
+      ),
+      dialogSize: const Size(325, 400),
+      value: initialDates,
+      borderRadius: BorderRadius.circular(15),
+    );
+
+    if (result != null && result.isNotEmpty) {
+      onDateSelected(result);
+    }
+  }
+
+  static Future<void> showDateTimePickerHelper({
+    required BuildContext context,
+    required DateTime? initialDate,
+    required void Function(DateTime selectedDateTime) onDateTimeSelected,
+  }) async {
+    final dateResult = await showCalendarDatePicker2Dialog(
+      context: context,
+      config: CalendarDatePicker2WithActionButtonsConfig(
+        selectedDayHighlightColor: BaseColor.blue,
+        daySplashColor: BaseColor.softBlue,
+      ),
+      dialogSize: const Size(325, 400),
+      value: [initialDate],
+      borderRadius: BorderRadius.circular(15),
+    );
+
+    if (dateResult == null || dateResult.isEmpty || dateResult.first == null) {
+      return; 
+    }
+
+    DateTime selectedDate = dateResult.first!;
+
+    final timeOfDay = await showTimePicker(
+      context: context,
+      
+      initialTime: TimeOfDay.fromDateTime(initialDate ?? DateTime.now()),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            timePickerTheme: TimePickerThemeData(
+              dialHandColor: BaseColor.blue,
+              dialBackgroundColor: BaseColor.softBlue,
+              confirmButtonStyle: ButtonStyle(
+                foregroundColor: WidgetStateProperty.all(BaseColor.blue),
+              ),
+              cancelButtonStyle: ButtonStyle(
+                foregroundColor: WidgetStateProperty.all(BaseColor.grey2),
+              ),
+              
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (timeOfDay != null) {
+      final selectedDateTime = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        timeOfDay.hour,
+        timeOfDay.minute,
+      );
+      onDateTimeSelected(selectedDateTime);
+    }
   }
 
   static String timeAgoSinceDate(

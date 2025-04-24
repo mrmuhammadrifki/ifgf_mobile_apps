@@ -79,6 +79,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           controller: widget.controller,
           readOnly: widget.isReadOnly ?? false,
           onTap: widget.onTap,
+          style: const TextStyle(
+            fontSize: 16,
+            color: BaseColor.black2,
+            fontWeight: FontWeight.w400,
+          ),
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: BaseColor.border),

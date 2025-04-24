@@ -7,6 +7,10 @@ extension TextExtension on Text {
         style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.w600),
       );
 
+  Text p28m() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.w500),
+      );
+
   Text p24sb() => copyWith(
         style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w600),
       );
@@ -17,6 +21,10 @@ extension TextExtension on Text {
 
   Text p20b() => copyWith(
         style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w700),
+      );
+
+  Text p20m() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w500),
       );
 
   Text p18b() => copyWith(

@@ -8,6 +8,7 @@ import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
 import 'package:ifgf_apps/core/utils/extension.dart';
+import 'package:ifgf_apps/core/utils/helper.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -129,7 +130,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
           prefixIcon: AssetsIcon.calendar,
           isReadOnly: true,
           isPicker: true,
-          onTap: () => showBirthDatePicker(),
+          onTap: () async {
+            await Helper.showCalendarPickerHelper(
+              context: context,
+              initialDates: _dates,
+              onDateSelected: (selectedDates) {
+                _dates
+                  ..clear()
+                  ..addAll(selectedDates);
+                birthDateController.text =
+                    _dates.first?.toString().formattedDate ?? '';
+                log('Selected date: ${birthDateController.text}');
+              },
+            );
+          },
           controller: birthDateController,
         ),
         SizedBox(height: 20.0),
@@ -169,27 +183,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ],
     );
-  }
-
-  Future<void> showBirthDatePicker() async {
-    final result = await showCalendarDatePicker2Dialog(
-      context: context,
-      config: CalendarDatePicker2WithActionButtonsConfig(
-        selectedDayHighlightColor: BaseColor.blue,
-        daySplashColor: BaseColor.softBlue,
-      ),
-      dialogSize: const Size(325, 400),
-      value: _dates,
-      borderRadius: BorderRadius.circular(15),
-    );
-
-    if (result != null && result.isNotEmpty) {
-      _dates
-        ..clear()
-        ..addAll(result);
-      birthDateController.text = _dates.first?.toString().formattedDate ?? '';
-      log('Selected date: ${birthDateController.text}');
-    }
   }
 
   Widget _buildTitle() {

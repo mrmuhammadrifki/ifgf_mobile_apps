@@ -2,10 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ifgf_apps/config/routes/bottom_navigation_page.dart';
 import 'package:ifgf_apps/config/routes/route_path.dart';
+import 'package:ifgf_apps/presentation/pages/acara/acara_screen.dart';
+import 'package:ifgf_apps/presentation/pages/create_acara/acara_provider/create_acara_provider.dart';
+import 'package:ifgf_apps/presentation/pages/create_acara/create_acara.dart';
+import 'package:ifgf_apps/presentation/pages/create_discipleship_journey/create_discipleship_journey.dart';
+import 'package:ifgf_apps/presentation/pages/create_discipleship_journey/create_discipleship_journey_provider/create_discipleship_journey_provider.dart';
+import 'package:ifgf_apps/presentation/pages/create_icare/create_icare.dart';
+import 'package:ifgf_apps/presentation/pages/create_icare/create_icare_provider/create_icare_provider.dart';
+import 'package:ifgf_apps/presentation/pages/create_super_sunday/create_super_sunday.dart';
+import 'package:ifgf_apps/presentation/pages/create_super_sunday/create_super_sunday_provider/create_super_sunday_provider.dart';
+import 'package:ifgf_apps/presentation/pages/detail_jadwal/detail_jadwal.dart';
 import 'package:ifgf_apps/presentation/pages/home/home_screen.dart';
+import 'package:ifgf_apps/presentation/pages/jadwal/jadwal_screen.dart';
 import 'package:ifgf_apps/presentation/pages/login/login_screen.dart';
 import 'package:ifgf_apps/presentation/pages/profile/profile_screen.dart';
 import 'package:ifgf_apps/presentation/pages/register/register_screen.dart';
+import 'package:provider/provider.dart';
 
 class Navigation {
   static final GlobalKey<NavigatorState> baseNavigatorKey =
@@ -51,7 +63,7 @@ class Navigation {
   ];
 
   static final List<RouteBase> _routes = [
-     StatefulShellRoute.indexedStack(
+    StatefulShellRoute.indexedStack(
       parentNavigatorKey: baseNavigatorKey,
       branches: branches,
       pageBuilder: (
@@ -75,6 +87,92 @@ class Navigation {
       path: RoutePath.register,
       pageBuilder: (context, GoRouterState state) {
         return _getPage(child: RegisterScreen(), state: state);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.acara,
+      pageBuilder: (context, GoRouterState state) {
+        return _getPage(child: AcaraScreen(), state: state);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.createAcara,
+      pageBuilder: (context, GoRouterState state) {
+        final isEdit = state.extra as bool? ?? false;
+        return _getPage(
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => CreateAcaraProvider(),
+              ),
+            ],
+            child: CreateAcara(isEdit: isEdit),
+          ),
+          state: state,
+        );
+      },
+    ),
+    GoRoute(
+      path: RoutePath.jadwal,
+      pageBuilder: (context, GoRouterState state) {
+        return _getPage(child: JadwalScreen(), state: state);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.detailJadwal,
+      pageBuilder: (context, GoRouterState state) {
+        return _getPage(child: DetailJadwal(), state: state);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.createSuperSunday,
+      pageBuilder: (context, GoRouterState state) {
+        final isEdit = state.extra as bool? ?? false;
+        return _getPage(
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => CreateSuperSundayProvider(),
+              ),
+            ],
+            child: CreateSuperSunday(isEdit: isEdit),
+          ),
+          state: state,
+        );
+      },
+    ),
+    GoRoute(
+      path: RoutePath.createIcare,
+      pageBuilder: (context, GoRouterState state) {
+        final isEdit = state.extra as bool? ?? false;
+        return _getPage(
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => CreateIcareProvider(),
+              ),
+            ],
+            child: CreateIcare(isEdit: isEdit),
+          ),
+          state: state,
+        );
+      },
+    ),
+    GoRoute(
+      path: RoutePath.createDiscipleshipJourney,
+      pageBuilder: (context, GoRouterState state) {
+        final isEdit = state.extra as bool? ?? false;
+        return _getPage(
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => CreateDiscipleshipJourneyProvider(),
+              ),
+            ],
+            child: CreateDiscipleshipJourney(isEdit: isEdit),
+          ),
+          state: state,
+        );
       },
     ),
   ];

@@ -11,19 +11,27 @@ extension DateFormatting on String {
     }
   }
 
+  String get formattedDateTime {
+    try {
+      DateTime dateTime = DateTime.parse(this);
+      return DateFormat('d MMMM yyyy, HH.mm', 'id_ID').format(dateTime);
+    } catch (e) {
+      return this;
+    }
+  }
+
   String get formattedDate2 {
     try {
       DateTime parsedDate = DateTime.parse(this);
       return DateFormat("E, d MMM y").format(parsedDate);
     } catch (e) {
-      return this; 
+      return this;
     }
   }
 }
 
 extension DateTimeExt on DateTime {
-  String get formattedDate =>
-      DateFormat('d MMMM yyyy').format(this);
+  String get formattedDate => DateFormat('d MMMM yyyy').format(this);
 }
 
 extension StringExt on String {
@@ -37,10 +45,9 @@ extension StringExt on String {
     return num.tryParse(this) is num;
   }
 
-  String get getInitials =>
-      isNotEmpty
-          ? trim().split(RegExp(' +')).map((s) => s[0]).take(2).join()
-          : '';
+  String get getInitials => isNotEmpty
+      ? trim().split(RegExp(' +')).map((s) => s[0]).take(2).join()
+      : '';
 
   bool isValidEmail() {
     return Regex.email.hasMatch(this);
