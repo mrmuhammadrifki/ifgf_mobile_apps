@@ -94,6 +94,13 @@ class _CreateTrxScreenState extends State<CreateTrxScreen> {
                   keyboardType: TextInputType.number,
                   controller: totalController,
                 ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Catatan",
+                  hintText: "Masukkan catatan jika perlu ya",
+                  prefixIcon: AssetsIcon.edit,
+                  controller: totalController,
+                ),
                 SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,

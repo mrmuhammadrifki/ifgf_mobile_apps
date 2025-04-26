@@ -12,14 +12,14 @@ import 'package:ifgf_apps/core/utils/modal.dart';
 import 'package:ifgf_apps/presentation/pages/keuangan/widgets/filter_by_category.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_app_bar.dart';
 
-class KeuanganPage extends StatefulWidget {
-  const KeuanganPage({super.key});
+class KeuanganScreen extends StatefulWidget {
+  const KeuanganScreen({super.key});
 
   @override
-  State<KeuanganPage> createState() => _KeuanganPageState();
+  State<KeuanganScreen> createState() => _KeuanganScreenState();
 }
 
-class _KeuanganPageState extends State<KeuanganPage> {
+class _KeuanganScreenState extends State<KeuanganScreen> {
   final List<String> list = [
     "Semua Transaksi",
     "Icare",
@@ -59,68 +59,7 @@ class _KeuanganPageState extends State<KeuanganPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack(
-                children: [
-                  Container(
-                    height: 300,
-                    width: double.infinity,
-                    color: BaseColor.blue,
-                  ),
-                  Positioned(
-                    top: 26,
-                    left: 16,
-                    right: 16,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _buildMonthYearPicker(context);
-                              },
-                              child: Text(
-                                selectedDate
-                                        ?.toIso8601String()
-                                        .formattedMonthYear ??
-                                    "",
-                              ).p16m().white(),
-                            ),
-                            SizedBox(width: 8),
-                            SvgPicture.asset(
-                              AssetsIcon.arrowDown,
-                              colorFilter: ColorFilter.mode(
-                                BaseColor.white,
-                                BlendMode.srcIn,
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Text("Saldo").p18r().white(),
-                        SizedBox(height: 2),
-                        Text("Rp. 10.000.000").p32m().white(),
-                        SizedBox(height: 16),
-                        Row(
-                          children: [
-                            _buildCashFlowCard(
-                              title: "Pemasukan",
-                              total: "Rp. 10.000.000",
-                              icon: AssetsIcon.arrowDownGreen,
-                            ),
-                            SizedBox(width: 8),
-                            _buildCashFlowCard(
-                              title: "Pengeluaran",
-                              total: "Rp. 5.000.000",
-                              icon: AssetsIcon.arrowUpDanger,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+              _buildHeroSection(context),
               SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -144,6 +83,66 @@ class _KeuanganPageState extends State<KeuanganPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHeroSection(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          height: 300,
+          width: double.infinity,
+          color: BaseColor.blue,
+        ),
+        Positioned(
+          top: 26,
+          left: 16,
+          right: 16,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () => _showMonthYearPicker(context),
+                child: Row(
+                  children: [
+                    Text(
+                      selectedDate?.toIso8601String().formattedMonthYear ?? "",
+                    ).p16m().white(),
+                    SizedBox(width: 8),
+                    SvgPicture.asset(
+                      AssetsIcon.arrowDown,
+                      colorFilter: ColorFilter.mode(
+                        BaseColor.white,
+                        BlendMode.srcIn,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+              Text("Saldo").p18r().white(),
+              SizedBox(height: 2),
+              Text("Rp. 10.000.000").p32m().white(),
+              SizedBox(height: 16),
+              Row(
+                children: [
+                  _buildCashFlowCard(
+                    title: "Pemasukan",
+                    total: "Rp. 10.000.000",
+                    icon: AssetsIcon.arrowDownGreen,
+                  ),
+                  SizedBox(width: 8),
+                  _buildCashFlowCard(
+                    title: "Pengeluaran",
+                    total: "Rp. 5.000.000",
+                    icon: AssetsIcon.arrowUpDanger,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
@@ -177,7 +176,7 @@ class _KeuanganPageState extends State<KeuanganPage> {
     );
   }
 
-  void _buildMonthYearPicker(BuildContext context) {
+  void _showMonthYearPicker(BuildContext context) {
     return showMonthPicker(context, onSelected: (month, year) {
       if (kDebugMode) {
         print('Selected month: $month, year: $year');

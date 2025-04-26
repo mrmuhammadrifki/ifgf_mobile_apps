@@ -180,7 +180,7 @@ class _DetailJadwalState extends State<DetailJadwal> {
   }
 
   void _onGoToEditSuperSunday() {
-    context.push(RoutePath.createSuperSunday, extra: true);
+    context.push(RoutePath.createJadwalSuperSunday, extra: true);
   }
 
   Widget _buildPetugas({required String job, required String names}) {

@@ -25,7 +25,7 @@ base class Modal {
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
               style: TextButton.styleFrom(
-                foregroundColor: BaseColor.blue,
+                foregroundColor: BaseColor.grey2,
               ),
               child: Text(cancelText),
             ),

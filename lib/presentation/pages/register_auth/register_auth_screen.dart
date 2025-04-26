@@ -1,22 +1,32 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ifgf_apps/config/routes/route_path.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
+import 'package:ifgf_apps/core/utils/extension.dart';
+import 'package:ifgf_apps/core/utils/helper.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_text_field.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterAuthScreen extends StatefulWidget {
+  const RegisterAuthScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterAuthScreen> createState() => _RegisterAuthScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterAuthScreenState extends State<RegisterAuthScreen> {
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordConfirmController =
+      TextEditingController();
+
+  final List<DateTime?> _dates = [];
 
   @override
   void initState() {
@@ -36,17 +46,18 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: BaseColor.softBlue,
-          ),
-          Center(
-            child: SingleChildScrollView(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: BaseColor.softBlue,
+            ),
+            SingleChildScrollView(
               child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                margin: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 24.0),
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 decoration: BoxDecoration(
                   color: BaseColor.white,
@@ -71,18 +82,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => _onGoToHome(),
-                        child: Text('Login'),
+                        onPressed: () {},
+                        child: Text('Daftar'),
                       ),
                     ),
                     SizedBox(height: 16.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Belum punya akun? ').p14r().grey2(),
+                        Text('Sudah punya akun? ').p14r().grey2(),
                         GestureDetector(
-                          onTap: _onGoToRegister,
-                          child: Text('Daftar').p14m().blue(),
+                          onTap: _onGoToLogin,
+                          child: Text('Login').p14m().blue(),
                         ),
                       ],
                     ),
@@ -90,24 +101,59 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  void _onGoToHome() {
-    context.go(RoutePath.home);
-  }
-
-  void _onGoToRegister() {
-    context.push(RoutePath.registerAuth);
+  void _onGoToLogin() {
+    context.pop();
   }
 
   Widget _buildForm() {
     return Column(
       children: [
+        CustomTextFormField(
+          title: 'Nama Lengkap',
+          hintText: 'Masukkan nama lengkap-mu ya',
+          prefixIcon: AssetsIcon.user,
+          keyboardType: TextInputType.name,
+          controller: fullNameController,
+        ),
+        SizedBox(height: 20.0),
+        CustomTextFormField(
+          title: 'Tanggal Lahir',
+          hintText: 'Pilih tanggal lahir-mu ya',
+          prefixIcon: AssetsIcon.calendar,
+          isReadOnly: true,
+          isPicker: true,
+          onTap: () async {
+            await Helper.showCalendarPickerHelper(
+              context: context,
+              initialDates: _dates,
+              onDateSelected: (selectedDates) {
+                _dates
+                  ..clear()
+                  ..addAll(selectedDates);
+                birthDateController.text =
+                    _dates.first?.toString().formattedDate ?? '';
+                log('Selected date: ${birthDateController.text}');
+              },
+            );
+          },
+          controller: birthDateController,
+        ),
+        SizedBox(height: 20.0),
+        CustomTextFormField(
+          title: 'Nomor HP',
+          hintText: 'Masukkan nomor hp-mu ya',
+          prefixIcon: AssetsIcon.phone,
+          keyboardType: TextInputType.phone,
+          controller: phoneController,
+        ),
+        SizedBox(height: 20.0),
         CustomTextFormField(
           title: 'Username',
           hintText: 'Masukkan username-mu ya',
@@ -120,10 +166,19 @@ class _LoginScreenState extends State<LoginScreen> {
           title: 'Password',
           hintText: 'Masukkan password-mu ya',
           prefixIcon: AssetsIcon.password,
-          textInputAction: TextInputAction.done,
           isPassword: true,
           obscureText: true,
           controller: passwordController,
+        ),
+        SizedBox(height: 20.0),
+        CustomTextFormField(
+          title: 'Konfirmasi Password',
+          hintText: 'Masukkan konfirmasi password-mu ya',
+          prefixIcon: AssetsIcon.password,
+          textInputAction: TextInputAction.done,
+          isPassword: true,
+          obscureText: true,
+          controller: passwordConfirmController,
         ),
       ],
     );
@@ -140,9 +195,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         SizedBox(height: 8),
-        Text('Gereja').p18sm().black2(),
-        Text('IFGF Purwokerto').p18sm().black2(),
-        Text('Connecting People with God’s Purpuse').p14r().grey2(),
+        Text('Gereja').p18r().black2(),
+        Text('IFGF Purwokerto').p18r().black2(),
+        Text('Formulir Pendaftaran Jemaat').p18sm().black2(),
       ],
     );
   }

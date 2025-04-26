@@ -52,7 +52,7 @@ class _DiscipleshipJourneyTabState extends State<DiscipleshipJourneyTab>
   }
 
   void _onGoToEditDiscipleshipJourney() {
-    context.push(RoutePath.createDiscipleshipJourney, extra: true);
+    context.push(RoutePath.createJadwalDiscipleshipJourney, extra: true);
   }
 
   List<Widget> _buildActionButton() {

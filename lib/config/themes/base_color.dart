@@ -20,7 +20,8 @@ base class BaseColor {
   static const Color success = Color(0xff28A745);
   static const Color danger = Color(0xffDC3545);
   static const Color warning = Color(0xffFFC107);
-  static const Color info = Color(0xff17A2B8);
+  static const Color info = Color(0xff636A79);
+  static const Color icon = Color(0xff636A79);
 
   static const int _greyPrimaryValue = 0xff59636B;
   static const MaterialColor grey =

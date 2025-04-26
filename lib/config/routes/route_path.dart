@@ -1,4 +1,5 @@
 base class RoutePath {
+  static const String registerAuth = '/registerAuth';
   static const String register = '/register';
   static const String login = '/login';
   static const String home = '/home';
@@ -7,9 +8,17 @@ base class RoutePath {
   static const String createAcara = '/createAcara';
   static const String jadwal = '/jadwal';
   static const String detailJadwal = '/detailJadwal';
-  static const String createSuperSunday = '/createSuperSunday';
-  static const String createIcare = '/createIcare';
-  static const String createDiscipleshipJourney = '/createDiscipleshipJourney';
+  static const String createJadwalSuperSunday = '/createJadwalSuperSunday';
+  static const String createJadwalIcare = '/createJadwalIcare';
+  static const String createJadwalDiscipleshipJourney =
+      '/createJadwalDiscipleshipJourney';
   static const String keuangan = '/keuangan';
-    static const String createTrx = '/createTrx';
+  static const String createTrx = '/createTrx';
+  static const String jemaat = '/jemaat';
+  static const String memberIcare = '/memberIcare';
+  static const String memberDiscipleshipJourney = '/memberDiscipleshipJourney';
+  static const String registerJemaat = '/registerJemaat';
+  static const String registerIcare = '/registerIcare';
+  static const String registerDiscipleshipJourney =
+      '/registerDiscipleshipJourney';
 }

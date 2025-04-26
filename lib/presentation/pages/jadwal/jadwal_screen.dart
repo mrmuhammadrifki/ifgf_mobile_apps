@@ -136,15 +136,15 @@ class _JadwalScreenState extends State<JadwalScreen>
   }
 
   void _onGoToCreateSuperSunday() {
-    context.push(RoutePath.createSuperSunday);
+    context.push(RoutePath.createJadwalSuperSunday);
   }
 
   void _onGoToCreateIcare() {
-    context.push(RoutePath.createIcare);
+    context.push(RoutePath.createJadwalIcare);
   }
 
   void _onGoToCreateDiscipleshipJourney() {
-    context.push(RoutePath.createDiscipleshipJourney);
+    context.push(RoutePath.createJadwalDiscipleshipJourney);
   }
 
   Widget _buildJenisJadwal({required String title}) {

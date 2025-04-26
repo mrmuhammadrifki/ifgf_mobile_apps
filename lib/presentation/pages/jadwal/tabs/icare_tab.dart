@@ -54,7 +54,7 @@ class _IcareTabState extends State<IcareTab>
   }
 
   void _onGoToEditIcare() {
-    context.push(RoutePath.createIcare, extra: true);
+    context.push(RoutePath.createJadwalIcare, extra: true);
   }
 
   List<Widget> _buildActionButton() {

@@ -7,7 +7,7 @@ import 'package:ifgf_apps/core/utils/modal.dart';
 import 'package:ifgf_apps/data/models/file_upload_response.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CreateDiscipleshipJourneyProvider extends ChangeNotifier {
+class CreateJadwalIcareProvider extends ChangeNotifier {
   final List<FileUploadResponse> _imageSelected = [];
   List<FileUploadResponse> get imageSelected => _imageSelected;
 

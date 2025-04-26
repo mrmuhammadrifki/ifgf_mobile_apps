@@ -100,9 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(width: 8),
                       Expanded(
-                        child: _buildMenuItem(
-                          title: "Pendaftaran Pastorit",
-                          icon: AssetsIcon.register,
+                        child: InkWell(
+                          onTap: _onGoToPendaftaran,
+                          child: _buildMenuItem(
+                            title: "Pendaftaran Pastorit",
+                            icon: AssetsIcon.register,
+                          ),
                         ),
                       ),
                     ],
@@ -126,6 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onGoToJadwal() {
     context.push(RoutePath.jadwal);
+  }
+
+  void _onGoToPendaftaran() {
+    context.push(RoutePath.register);
   }
 
   Widget _buildMenuItem({required String icon, required String title}) {

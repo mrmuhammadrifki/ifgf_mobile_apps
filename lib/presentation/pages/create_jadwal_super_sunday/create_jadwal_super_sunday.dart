@@ -8,44 +8,43 @@ import 'package:ifgf_apps/core/utils/ext_text.dart';
 import 'package:ifgf_apps/core/utils/extension.dart';
 import 'package:ifgf_apps/core/utils/helper.dart';
 import 'package:ifgf_apps/core/utils/modal.dart';
-import 'package:ifgf_apps/presentation/pages/create_discipleship_journey/create_discipleship_journey_provider/create_discipleship_journey_provider.dart';
-import 'package:ifgf_apps/presentation/pages/create_icare/create_icare_provider/create_icare_provider.dart';
+import 'package:ifgf_apps/presentation/pages/create_jadwal_super_sunday/create_jadwal_super_sunday_provider/create_jadwal_super_sunday_provider.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_app_bar.dart';
-import 'package:ifgf_apps/presentation/widgets/custom_dropdown.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
-class CreateDiscipleshipJourney extends StatefulWidget {
+class CreateJadwalSuperSunday extends StatefulWidget {
   final bool? isEdit;
-  const CreateDiscipleshipJourney({super.key, this.isEdit = false});
+  const CreateJadwalSuperSunday({super.key, this.isEdit = false});
 
   @override
-  State<CreateDiscipleshipJourney> createState() =>
-      _CreateDiscipleshipJourneyState();
+  State<CreateJadwalSuperSunday> createState() =>
+      _CreateJadwalSuperSundayState();
 }
 
-class _CreateDiscipleshipJourneyState extends State<CreateDiscipleshipJourney> {
-  final TextEditingController jenisKelasController = TextEditingController();
+class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
+  final TextEditingController preacherController = TextEditingController();
+  final TextEditingController singerController = TextEditingController();
+  final TextEditingController keyboardController = TextEditingController();
+  final TextEditingController basController = TextEditingController();
+  final TextEditingController gitarController = TextEditingController();
+  final TextEditingController drumController = TextEditingController();
+  final TextEditingController multimediaController = TextEditingController();
+  final TextEditingController dokumentasiController = TextEditingController();
+  final TextEditingController lcdOperatorController = TextEditingController();
+  final TextEditingController lightingController = TextEditingController();
 
   final List<DateTime?> _dates = [];
-
-  final List<String> jenisKelasList = [
-    "Discipleship Journey 1",
-    "Discipleship Journey 2",
-    "Discipleship Journey 3",
-    "Discipleship Journey 4",
-    "Discipleship Journey 5",
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         titleText: widget.isEdit ?? false
-            ? "Edit Discipleship Journey"
-            : "Tambah Discipleship Journey",
+            ? "Edit Super Sunday"
+            : "Tambah Super Sunday",
         showBackIcon: true,
       ),
       body: SafeArea(
@@ -66,8 +65,6 @@ class _CreateDiscipleshipJourneyState extends State<CreateDiscipleshipJourney> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomDropdown(title: "Jenis Kelas", list: jenisKelasList),
-                SizedBox(height: 20),
                 CustomTextFormField(
                   title: "Tanggal Jadwal",
                   hintText: "Pilih tanggal jadwal ya",
@@ -92,15 +89,89 @@ class _CreateDiscipleshipJourneyState extends State<CreateDiscipleshipJourney> {
                 ),
                 SizedBox(height: 20),
                 CustomTextFormField(
-                  title: "Tempat",
-                  hintText: "Masukkan tempat ya",
+                  title: "Lokasi Jadwal",
+                  hintText: "Masukkan tempat jadwal ya",
                   prefixIcon: AssetsIcon.locationBlack,
                   controller: locationController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Preacher",
+                  hintText: "Masukkan petugas preacher ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: preacherController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Singer",
+                  hintText: "Masukkan petugas singer ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: singerController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Keyboard",
+                  hintText: "Masukkan petugas keyboard ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: keyboardController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Bas",
+                  hintText: "Masukkan petugas bas ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: basController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Gitar",
+                  hintText: "Masukkan petugas gitar ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: gitarController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Drum",
+                  hintText: "Masukkan petugas drum ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: drumController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Multimedia",
+                  hintText: "Masukkan petugas multimedia ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: multimediaController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Dokumentasi",
+                  hintText: "Masukkan petugas dokumentasi ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: dokumentasiController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "LCD Operator",
+                  hintText: "Masukkan petugas LCD Operator ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: lcdOperatorController,
+                ),
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  title: "Lighting",
+                  hintText: "Masukkan petugas lighting ya",
+                  prefixIcon: AssetsIcon.user,
+                  controller: lightingController,
                 ),
                 SizedBox(height: 20),
                 Text("Upload Foto").p14r().black2(),
                 SizedBox(height: 4),
                 _imagePickerDialog(),
+                SizedBox(height: 16),
+                Text("Note:\nGunakan pemisah koma jika petugas lebih dari satu orang.")
+                    .p14r()
+                    .black2(),
                 SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
@@ -118,7 +189,7 @@ class _CreateDiscipleshipJourneyState extends State<CreateDiscipleshipJourney> {
   }
 
   Widget _imagePickerDialog() {
-    final provider = context.read<CreateDiscipleshipJourneyProvider>();
+    final provider = context.read<CreateJadwalSuperSundayProvider>();
     return InkWell(
         onTap: () {
           Modal.baseBottomSheet(

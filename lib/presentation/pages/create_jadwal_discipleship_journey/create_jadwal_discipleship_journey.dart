@@ -8,40 +8,44 @@ import 'package:ifgf_apps/core/utils/ext_text.dart';
 import 'package:ifgf_apps/core/utils/extension.dart';
 import 'package:ifgf_apps/core/utils/helper.dart';
 import 'package:ifgf_apps/core/utils/modal.dart';
-import 'package:ifgf_apps/presentation/pages/create_icare/create_icare_provider/create_icare_provider.dart';
+import 'package:ifgf_apps/presentation/pages/create_jadwal_discipleship_journey/create_jadwal_discipleship_journey_provider/create_jadwal_discipleship_journey_provider.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_app_bar.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_dropdown.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
-class CreateIcare extends StatefulWidget {
+class CreateJadwalDiscipleshipJourney extends StatefulWidget {
   final bool? isEdit;
-  const CreateIcare({super.key, this.isEdit = false});
+  const CreateJadwalDiscipleshipJourney({super.key, this.isEdit = false});
 
   @override
-  State<CreateIcare> createState() => _CreateIcareState();
+  State<CreateJadwalDiscipleshipJourney> createState() =>
+      _CreateJadwalDiscipleshipJourneyState();
 }
 
-class _CreateIcareState extends State<CreateIcare> {
-  final TextEditingController jenisIcareController = TextEditingController();
+class _CreateJadwalDiscipleshipJourneyState
+    extends State<CreateJadwalDiscipleshipJourney> {
+  final TextEditingController jenisKelasController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
 
   final List<DateTime?> _dates = [];
 
-  final List<String> jenisIcareList = [
-    "Icare 1",
-    "Icare 2",
-    "Icare 3",
-    "Icare 4",
-    "Icare 5",
+  final List<String> jenisKelasList = [
+    "Discipleship Journey 1",
+    "Discipleship Journey 2",
+    "Discipleship Journey 3",
+    "Discipleship Journey 4",
+    "Discipleship Journey 5",
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        titleText: widget.isEdit ?? false ? "Edit Icare" : "Tambah Icare",
+        titleText: widget.isEdit ?? false
+            ? "Edit Discipleship Journey"
+            : "Tambah Discipleship Journey",
         showBackIcon: true,
       ),
       body: SafeArea(
@@ -62,7 +66,7 @@ class _CreateIcareState extends State<CreateIcare> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomDropdown(title: "Jenis Icare", list: jenisIcareList),
+                CustomDropdown(title: "Jenis Kelas", list: jenisKelasList),
                 SizedBox(height: 20),
                 CustomTextFormField(
                   title: "Tanggal Jadwal",
@@ -114,7 +118,7 @@ class _CreateIcareState extends State<CreateIcare> {
   }
 
   Widget _imagePickerDialog() {
-    final provider = context.read<CreateIcareProvider>();
+    final provider = context.read<CreateJadwalDiscipleshipJourneyProvider>();
     return InkWell(
         onTap: () {
           Modal.baseBottomSheet(

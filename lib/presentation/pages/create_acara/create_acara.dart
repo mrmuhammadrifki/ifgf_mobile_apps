@@ -37,7 +37,7 @@ class _CreateAcaraState extends State<CreateAcara> {
       ),
       body: SafeArea(
         child: Container(
-          height: MediaQuery.of(context).size.height,
+          height: Helper.heightScreen(context),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
