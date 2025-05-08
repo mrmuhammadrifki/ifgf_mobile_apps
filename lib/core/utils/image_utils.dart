@@ -9,12 +9,6 @@ class ImageUtils {
     return _compressImage(pickedFile);
   }
 
-  static Future<XFile?> pickVideo({required ImageSource source}) async {
-    final XFile? pickedFile = await ImagePicker().pickVideo(source: source);
-
-    return pickedFile;
-  }
-
   static Future<XFile?> _compressImage(XFile? file) async {
     developer.log("size then : ${await file?.length()}");
 
@@ -48,4 +42,5 @@ class ImageUtils {
       return compressedImage;
     }
   }
+
 }

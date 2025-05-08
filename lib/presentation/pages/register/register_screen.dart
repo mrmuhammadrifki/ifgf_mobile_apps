@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:ifgf_apps/config/routes/route_path.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
+import 'package:ifgf_apps/presentation/pages/profile/provider/profile_provider.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_app_bar.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,6 +17,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ProfileProvider>();
     return Scaffold(
       appBar: CustomAppBar(
         titleText: "Pendaftaran",
@@ -38,11 +41,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Text("Jenis Pendaftaran").p18m().black2(),
             SizedBox(height: 16),
-            InkWell(
-              onTap: _onGoToJemaat,
-              child: _buildMenuItem(title: "Jemaat Baru"),
-            ),
-            SizedBox(height: 8),
+            provider.profile?.isAdmin ?? false
+                ? InkWell(
+                    onTap: _onGoToJemaat,
+                    child: _buildMenuItem(title: "Jemaat Baru"),
+                  )
+                : SizedBox(),
+            SizedBox(height: provider.profile?.isAdmin ?? false ? 8 : 0),
             InkWell(
               onTap: _onGoToMemberIcare,
               child: _buildMenuItem(title: "Icare"),

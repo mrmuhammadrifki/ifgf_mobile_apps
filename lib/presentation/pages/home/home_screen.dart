@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ifgf_apps/config/routes/route_path.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
+import 'package:ifgf_apps/core/utils/helper.dart';
+import 'package:ifgf_apps/presentation/pages/profile/provider/profile_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,105 +22,122 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: BaseColor.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-    );
+    _onRefresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: BaseColor.softBlue,
-      body: Column(
-        children: [
-          _buildHeroSection(),
-          SizedBox(height: 16),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              decoration: BoxDecoration(
-                color: BaseColor.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFFFFFFFF),
-                    Color(0xFFCCDDF2),
-                  ],
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Shalom,").p16r().black2(),
-                  Text("Juwita Kristiani Hia 👋").p24m(),
-                  SizedBox(height: 32),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: _onGoToAcara,
-                          child: _buildMenuItem(
-                            title: "Acara",
-                            icon: AssetsIcon.event,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: InkWell(
-                          onTap: _onGoToJadwal,
-                          child: _buildMenuItem(
-                            title: "Jadwal",
-                            icon: AssetsIcon.jadwal,
-                          ),
-                        ),
-                      ),
-                    ],
+    final detailProfileResponse = context.watch<ProfileProvider>();
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+        systemNavigationBarColor: BaseColor.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: BaseColor.softBlue,
+        body: RefreshIndicator.adaptive(
+          onRefresh: _onRefresh,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                _buildHeroSection(),
+                SizedBox(height: 16),
+                Container(
+                  width: Helper.widthScreen(context),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  decoration: BoxDecoration(
+                    color: BaseColor.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                    ),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFFFFFFFF),
+                        Color(0xFFCCDDF2),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: _onGoToKeuangan,
-                          child: _buildMenuItem(
-                            title: "Keuangan",
-                            icon: AssetsIcon.money,
-                          ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 80),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Shalom,").p16r().black2(),
+                        Text("${detailProfileResponse.profile?.fullName} 👋")
+                            .p24m(),
+                        SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: _onGoToAcara,
+                                child: _buildMenuItem(
+                                  title: "Acara",
+                                  icon: AssetsIcon.event,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: InkWell(
+                                onTap: _onGoToJadwal,
+                                child: _buildMenuItem(
+                                  title: "Jadwal",
+                                  icon: AssetsIcon.jadwal,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: InkWell(
-                          onTap: _onGoToPendaftaran,
-                          child: _buildMenuItem(
-                            title: "Pendaftaran Pastorit",
-                            icon: AssetsIcon.register,
-                          ),
+                        SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: _onGoToKeuangan,
+                                child: _buildMenuItem(
+                                  title: "Keuangan",
+                                  icon: AssetsIcon.money,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: InkWell(
+                                onTap: _onGoToPendaftaran,
+                                child: _buildMenuItem(
+                                  title: "Pendaftaran Pastorit",
+                                  icon: AssetsIcon.register,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
+  }
+
+  Future<void> _onRefresh() async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final provider = context.read<ProfileProvider>();
+      provider.reload();
+    });
   }
 
   void _onGoToKeuangan() {
@@ -156,29 +177,30 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHeroSection() {
-    return Stack(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: Image.asset(
+    return SizedBox(
+      height: 200,
+      width: Helper.widthScreen(context),
+      child: Stack(
+        children: [
+          Image.asset(
             AssetsImage.heroBg,
             fit: BoxFit.cover,
           ),
-        ),
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(AssetsImage.logoDark, width: 86.0),
-                SizedBox(height: 8),
-                Text('IFGF Purwokerto').p18b().white()
-              ],
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(AssetsImage.logoDark, width: 86.0),
+                  SizedBox(height: 8),
+                  Text('IFGF Purwokerto').p18b().white()
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

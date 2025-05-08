@@ -1,4 +1,7 @@
 import 'dart:convert';
+
+import 'package:ifgf_apps/data/models/detail_profile_response.dart';
+import 'package:ifgf_apps/data/models/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
@@ -22,34 +25,32 @@ class SharedPref {
     await _sharedPrefs.reload();
   }
 
-  // static LoginResponse? get loginResponse {
-  //   try {
-  //     return LoginResponse.fromMap(
-  //       jsonDecode(_sharedPrefs.getString(_keySignIn) ?? ''),
-  //     );
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
+  static LoginResponse? get loginResponse {
+    try {
+      return LoginResponse.fromMap(
+          jsonDecode(_sharedPrefs.getString(_keySignIn) ?? ''));
+    } catch (e) {
+      return null;
+    }
+  }
 
-  // static set loginResponse(LoginResponse? value) {
-  //   _sharedPrefs.setString(_keySignIn, jsonEncode(value?.toMap()));
-  // }
+  static set loginResponse(LoginResponse? value) {
+    _sharedPrefs.setString(_keySignIn, jsonEncode(value?.toMap()));
+  }
 
-  // static ProfileResponse? get profileResponse {
-  //   try {
-  //     return ProfileResponse.fromMap(
-  //       jsonDecode(_sharedPrefs.getString(_keyProfile) ?? ''),
-  //     );
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
+  static DetailProfileResponse? get detailProfileResponse {
+    try {
+      return DetailProfileResponse.fromMap(
+          jsonDecode(_sharedPrefs.getString(_keyDetailProfile) ?? ''));
+    } catch (e) {
+      return null;
+    }
+  }
 
-  // static set profileResponse(ProfileResponse? value) {
-  //   _sharedPrefs.setString(_keyProfile, jsonEncode(value?.toMap()));
-  // }
+  static set detailProfileResponse(DetailProfileResponse? value) {
+    _sharedPrefs.setString(_keyDetailProfile, jsonEncode(value?.toMap()));
+  }
 }
 
 const String _keySignIn = "sign_in";
-const String _keyProfile = "profile";
+const String _keyDetailProfile = "detail_profile";

@@ -1,21 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
+import 'package:ifgf_apps/core/utils/extension.dart';
+import 'package:ifgf_apps/data/models/acara_response.dart';
 
 class EventCard extends StatelessWidget {
-  final String title;
-  final String location;
-  final String dateTime;
-  final String imageUrl;
+  final AcaraResponse? item;
   final List<Widget> actionButtons;
   const EventCard({
     super.key,
-    required this.title,
-    required this.location,
-    required this.dateTime,
-    required this.imageUrl,
-    required this.actionButtons,
+    this.item,
+    required this.actionButtons
   });
 
   @override
@@ -25,16 +22,21 @@ class EventCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.asset(AssetsImage.acaraExample),
+          child: CachedNetworkImage(
+            imageUrl: item?.thumbnail?.first?.url ?? "",
+            width: double.infinity,
+            height: 180,
+            fit: BoxFit.cover,
+          ),
         ),
         SizedBox(height: 8),
-        Text(title).p18m().black2(),
+        Text(item?.title ?? "").p18m().black2(),
         SizedBox(height: 8),
         Row(
           children: [
             SvgPicture.asset(AssetsIcon.location),
             SizedBox(width: 3),
-            Text(location).p14m().grey2()
+            Text(item?.location ?? "").p14m().grey2()
           ],
         ),
         SizedBox(height: 4),
@@ -42,7 +44,7 @@ class EventCard extends StatelessWidget {
           children: [
             SvgPicture.asset(AssetsIcon.calendarBlue),
             SizedBox(width: 3),
-            Text(dateTime).p14m().grey2()
+            Text(item?.dateTime?.formattedDayDateTime() ?? "").p14m().grey2()
           ],
         ),
         SizedBox(height: 16),

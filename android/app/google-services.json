@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "776981450339",
+    "project_id": "ifgf-purwokerto",
+    "storage_bucket": "ifgf-purwokerto.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776981450339:android:e614775145d80361177256",
+        "android_client_info": {
+          "package_name": "com.swu.ifgfapps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0_JKT84E-DAtM44eu4Mn9w_4DWfAyHL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

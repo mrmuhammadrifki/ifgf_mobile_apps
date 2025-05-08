@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ifgf_apps/presentation/widgets/custom_icon_button.dart';
+
+class CustomAppbarDark extends StatelessWidget implements PreferredSizeWidget {
+  final String titleText;
+  final bool showBackIcon;
+  final String? backIconAssets;
+  final List<Widget>? suffixWidget;
+  const CustomAppbarDark({
+    super.key,
+    required this.titleText,
+    this.showBackIcon = false,
+    this.suffixWidget,
+    this.backIconAssets,
+  });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(61);
+
+  @override
+  Widget build(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size(double.infinity, preferredSize.height),
+      child: AppBar(
+        backgroundColor: const Color(0xFF1D1D1D),
+        automaticallyImplyLeading: false,
+        toolbarHeight: preferredSize.height,
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: <Widget>[
+              if (showBackIcon)
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: CustomIconButton(
+                    onTap: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      } 
+                    },
+                    svgAssets: backIconAssets,
+                  ),
+                ),
+              Expanded(
+                child: Padding(
+                  padding: showBackIcon
+                      ? const EdgeInsets.only(left: 0.0, right: 8.0)
+                      : suffixWidget == null
+                          ? const EdgeInsets.only(
+                              left: 0.0,
+                              right: 0.0,
+                            )
+                          : const EdgeInsets.only(left: 45.0),
+                  child: Text(
+                    titleText,
+                    style: Theme.of(context).appBarTheme.titleTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              if (suffixWidget != null)
+                ...suffixWidget!
+              else if (showBackIcon)
+                const CustomIconButton()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

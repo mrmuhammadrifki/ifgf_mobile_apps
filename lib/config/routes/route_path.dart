@@ -21,4 +21,7 @@ base class RoutePath {
   static const String registerIcare = '/registerIcare';
   static const String registerDiscipleshipJourney =
       '/registerDiscipleshipJourney';
+  static const String editProfile = '/editProfile';
+  static const String tentangKami = '/tentangKami';
+    static const String photoView = '/photoView';
 }

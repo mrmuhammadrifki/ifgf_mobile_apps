@@ -1,16 +1,26 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_month_picker/flutter_custom_month_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ifgf_apps/config/routes/route_path.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
+import 'package:ifgf_apps/core/resources/data_state.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
+import 'package:ifgf_apps/core/utils/enum.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
 import 'package:ifgf_apps/core/utils/extension.dart';
+import 'package:ifgf_apps/core/utils/helper.dart';
 import 'package:ifgf_apps/core/utils/modal.dart';
+import 'package:ifgf_apps/data/models/create_acara_params.dart';
+import 'package:ifgf_apps/data/models/trx_response.dart';
+import 'package:ifgf_apps/presentation/pages/keuangan/cubit/list_trx_cubit.dart';
+import 'package:ifgf_apps/presentation/pages/keuangan/provider/keuangan_provider.dart';
 import 'package:ifgf_apps/presentation/pages/keuangan/widgets/filter_by_category.dart';
+import 'package:ifgf_apps/presentation/pages/profile/provider/profile_provider.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_app_bar.dart';
+import 'package:ifgf_apps/presentation/widgets/list_trx_shimmer.dart';
 
 class KeuanganScreen extends StatefulWidget {
   const KeuanganScreen({super.key});
@@ -20,12 +30,27 @@ class KeuanganScreen extends StatefulWidget {
 }
 
 class _KeuanganScreenState extends State<KeuanganScreen> {
+  static final _keyLoader = GlobalKey<State>();
+  Future<void> _onRefresh({String? date, String? category}) async {
+    final refreshDate = date ?? selectedDate?.toIso8601String();
+    debugPrint("Pilih : $date - $category");
+    context.read<ListTrxCubit>().getAll(date: refreshDate, category: category);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _onRefresh();
+  }
+
   final List<String> list = [
     "Semua Transaksi",
-    "Icare",
-    "Super Sunday",
-    "Discipleship Journey",
+    "Persembahan Ibadah",
+    "Perpuluhan",
+    "Lain-lain",
   ];
+
+  String? _selectedCategory;
 
   DateTime? selectedDate = DateTime.now();
 
@@ -33,64 +58,114 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ProfileProvider>();
     return Scaffold(
-      appBar: CustomAppBar(
-        titleText: "Keuangan",
-        showBackIcon: true,
-        suffixWidget: [
-          TextButton(
-            onPressed: () => _onGoToCreateTrx(),
-            child: Text("Tambah").p18sm().blue(),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFFCCDDF2),
-                Color(0xFFFFFFFF),
+      appBar: provider.profile?.isAdmin ?? false
+          ? CustomAppBar(
+              titleText: "Keuangan",
+              showBackIcon: true,
+              suffixWidget: [
+                TextButton(
+                  onPressed: () => _onGoToCreateTrx(),
+                  child: Text("Tambah").p18sm().blue(),
+                )
+              ],
+            )
+          : CustomAppBar(
+              titleText: "Keuangan",
+              showBackIcon: true,
+            ),
+      body: Container(
+        width: Helper.widthScreen(context),
+        height: Helper.heightScreen(context),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFCCDDF2),
+              Color(0xFFFFFFFF),
+            ],
+          ),
+        ),
+        child: RefreshIndicator.adaptive(
+          onRefresh: _onRefresh,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BlocBuilder<ListTrxCubit, ListTrxState>(
+                  builder: (context, state) {
+                    return state.when(
+                      loading: () => _buildHeroSection(),
+                      success: (data) => _buildHeroSection(
+                        totalPemasukan: data.totalPemasukan,
+                        totalPengeluaran: data.totalPengeluaran,
+                        totalSaldo: data.totalSaldo,
+                      ),
+                      failure: () =>
+                          const Center(child: Text('Tidak ada data')),
+                    );
+                  },
+                ),
+                SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: FilterByCategory(
+                    list: list,
+                    value: _selectedCategory,
+                    onChanged: (value) {
+                      _selectedCategory = value;
+                      _onRefresh(
+                        date: selectedDate?.toIso8601String(),
+                        category: _selectedCategory == "Semua Transaksi"
+                            ? null
+                            : _selectedCategory,
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 16),
+                BlocBuilder<ListTrxCubit, ListTrxState>(
+                  builder: (context, state) {
+                    return state.when(
+                      loading: () => ListTrxShimmer(),
+                      success: (data) => data.data.isNotEmpty
+                          ? _buildList(data: data.data)
+                          : const Center(child: Text('Tidak ada data')),
+                      failure: () =>
+                          const Center(child: Text('Tidak ada data')),
+                    );
+                  },
+                ),
               ],
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeroSection(context),
-              SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FilterByCategory(list: list),
-                    SizedBox(height: 16),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return _buildTransactionList(index: index);
-                      },
-                    )
-                  ],
-                ),
-              ),
-            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildHeroSection(BuildContext context) {
+  Widget _buildList({List<TrxResponse>? data}) {
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: data?.length,
+      itemBuilder: (context, index) {
+        final item = data?[index];
+        return _buildTransactionList(index: index, item: item);
+      },
+    );
+  }
+
+  Widget _buildHeroSection(
+      {String? totalPemasukan, String? totalPengeluaran, String? totalSaldo}) {
     return Stack(
       children: [
         Container(
-          height: 300,
+          height: 310,
           width: double.infinity,
           color: BaseColor.blue,
         ),
@@ -122,19 +197,19 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
               SizedBox(height: 16),
               Text("Saldo").p18r().white(),
               SizedBox(height: 2),
-              Text("Rp. 10.000.000").p32m().white(),
+              Text(totalSaldo?.toRupiah() ?? "Rp. 0").p32m().white(),
               SizedBox(height: 16),
               Row(
                 children: [
                   _buildCashFlowCard(
                     title: "Pemasukan",
-                    total: "Rp. 10.000.000",
+                    total: totalPemasukan?.toRupiah() ?? "Rp. 0",
                     icon: AssetsIcon.arrowDownGreen,
                   ),
                   SizedBox(width: 8),
                   _buildCashFlowCard(
                     title: "Pengeluaran",
-                    total: "Rp. 5.000.000",
+                    total: totalPengeluaran?.toRupiah() ?? "Rp. 0",
                     icon: AssetsIcon.arrowUpDanger,
                   ),
                 ],
@@ -169,7 +244,11 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
             SizedBox(height: 2),
             Text(title).p14r().black2(),
             SizedBox(height: 4),
-            Text(total).p16m().black2(),
+            Text(
+              total,
+              maxLines: 2,
+              style: TextStyle(overflow: TextOverflow.ellipsis),
+            ).p16m().black2(),
           ],
         ),
       ),
@@ -184,6 +263,13 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
       setState(() {
         selectedDate = DateTime(year, month);
       });
+      if (selectedDate != null) {
+        _onRefresh(
+          date: selectedDate?.toIso8601String(),
+          category:
+              _selectedCategory == "Semua Transaksi" ? null : _selectedCategory,
+        );
+      }
     },
         initialSelectedMonth: selectedDate?.month ?? 1,
         initialSelectedYear: selectedDate?.year ?? 2025,
@@ -197,7 +283,8 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
         dialogBackgroundColor: Colors.grey[200]);
   }
 
-  Widget _buildTransactionList({required int index}) {
+  Widget _buildTransactionList({required int index, TrxResponse? item}) {
+    final provider = context.watch<ProfileProvider>();
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.only(bottom: 5),
@@ -211,11 +298,13 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
       child: Column(
         children: [
           InkWell(
-            onTap: () {
-              setState(() {
-                selectedIndex = selectedIndex == index ? null : index;
-              });
-            },
+            onTap: provider.profile?.isAdmin ?? false
+                ? () {
+                    setState(() {
+                      selectedIndex = selectedIndex == index ? null : index;
+                    });
+                  }
+                : () => _onGoToCreateTrx(id: item?.id, isEdit: true),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -224,36 +313,78 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Makan & Minum").p16m().black2(),
+                    Text(item?.category ?? "").p16m().black2(),
                     SizedBox(height: 2),
-                    Text("Senin, 21 April 2025 15.20").p14r().black2(),
+                    Text(item?.createdAt?.formattedDate ?? "").p14r().black2(),
                     SizedBox(height: 8),
                   ],
                 ),
-                Text("-Rp. 80.000").p16m().black2(),
+                Text(
+                  item?.jenisTrx?.toLowerCase() == "pemasukan"
+                      ? "+${item?.nominal.toString().toRupiah()}"
+                      : "-${item?.nominal.toString().toRupiah()}",
+                ).p16m().black2(),
               ],
             ),
           ),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 250),
-            transitionBuilder: (child, animation) => FadeTransition(
-              opacity: animation,
-              child: child,
-            ),
-            child: selectedIndex == index
-                ? _buildActionButton(key: const ValueKey('action'))
-                : const SizedBox.shrink(key: ValueKey('empty')),
-          )
+          provider.profile?.isAdmin ?? false
+              ? AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  transitionBuilder: (child, animation) => FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                  child: selectedIndex == index
+                      ? _buildActionButton(
+                          key: const ValueKey('action'), id: item?.id)
+                      : const SizedBox.shrink(key: ValueKey('empty')),
+                )
+              : SizedBox()
         ],
       ),
     );
   }
 
-  void _onGoToCreateTrx({bool? isEdit}) {
-    context.push(RoutePath.createTrx, extra: isEdit);
+  Future<void> _onDeleteTrx(String? id) async {
+    final provider = context.read<KeuanganProvider>();
+
+    Modal.showLoadingDialog(context, _keyLoader);
+
+    final response = await provider.deleteTrx(id: id);
+
+    Navigator.of(_keyLoader.currentContext!, rootNavigator: true).pop();
+
+    if (!mounted) return;
+
+    if (response is DataSuccess) {
+      Modal.showSnackBar(
+        context,
+        text: "Berhasil menghapus transaksi",
+        snackbarType: SnackbarType.success,
+      );
+    } else {
+      final errorMessage =
+          response.error?.toString() ?? "Terjadi kesalahan, silakan coba lagi.";
+      Modal.showSnackBar(
+        context,
+        text: errorMessage,
+        snackbarType: SnackbarType.danger,
+      );
+    }
   }
 
-  Row _buildActionButton({Key? key}) {
+  void _onGoToCreateTrx({bool? isEdit, String? id}) async {
+    final result = await context.push(
+      RoutePath.createTrx,
+      extra: CreateAcaraParams(isEdit: isEdit ?? false, id: id ?? ""),
+    );
+    if (result == true) {
+      Future.delayed(Duration.zero);
+      _onRefresh();
+    }
+  }
+
+  Row _buildActionButton({Key? key, String? id}) {
     return Row(
       key: key,
       children: [
@@ -264,6 +395,12 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
               title: "Hapus Transaksi",
               message: "Apakah anda yakin ingin menghapus transaksi ini?",
             );
+
+            if (result == true) {
+              _onDeleteTrx(id);
+              Future.delayed(Duration.zero);
+              _onRefresh();
+            }
           },
           child: Row(
             children: [
@@ -275,7 +412,7 @@ class _KeuanganScreenState extends State<KeuanganScreen> {
         ),
         SizedBox(width: 16),
         InkWell(
-          onTap: () => _onGoToCreateTrx(isEdit: true),
+          onTap: () => _onGoToCreateTrx(isEdit: true, id: id),
           child: Row(
             children: [
               SvgPicture.asset(AssetsIcon.edit),

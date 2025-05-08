@@ -2,8 +2,35 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/extension.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Helper {
+
+  static Future<void> openWhatsApp({
+    required String phoneNumber,
+    String message = "",
+  }) async {
+    final String encodedMessage = Uri.encodeComponent(message);
+    final String whatsappUrl =
+        "https://wa.me/$phoneNumber?text=$encodedMessage";
+
+    if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
+      await launchUrl(Uri.parse(whatsappUrl));
+    } else {
+      throw "Could not launch $whatsappUrl";
+    }
+  }
+
+  static Future<void> openLink(String link) async {
+    final Uri uri = Uri.parse(link);
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw "Could not launch $uri";
+    }
+  }
+
   static double widthScreen(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }

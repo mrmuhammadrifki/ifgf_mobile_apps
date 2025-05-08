@@ -3,9 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ifgf_apps/config/routes/route_path.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
+import 'package:ifgf_apps/core/resources/data_state.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
+import 'package:ifgf_apps/core/utils/enum.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
+import 'package:ifgf_apps/core/utils/extension.dart';
+import 'package:ifgf_apps/core/utils/message.dart';
+import 'package:ifgf_apps/core/utils/modal.dart';
+import 'package:ifgf_apps/data/provider/firebase_auth_provider.dart';
 import 'package:ifgf_apps/presentation/widgets/custom_text_field.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,8 +22,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+  static final _keyLoader = GlobalKey<State>();
 
   @override
   void initState() {
@@ -71,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => _onGoToHome(),
+                        onPressed: _onLogin,
                         child: Text('Login'),
                       ),
                     ),
@@ -97,36 +107,85 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _onGoToHome() {
-    context.go(RoutePath.home);
-  }
-
   void _onGoToRegister() {
     context.push(RoutePath.registerAuth);
   }
 
   Widget _buildForm() {
-    return Column(
-      children: [
-        CustomTextFormField(
-          title: 'Username',
-          hintText: 'Masukkan username-mu ya',
-          prefixIcon: AssetsIcon.user,
-          keyboardType: TextInputType.name,
-          controller: usernameController,
-        ),
-        SizedBox(height: 20.0),
-        CustomTextFormField(
-          title: 'Password',
-          hintText: 'Masukkan password-mu ya',
-          prefixIcon: AssetsIcon.password,
-          textInputAction: TextInputAction.done,
-          isPassword: true,
-          obscureText: true,
-          controller: passwordController,
-        ),
-      ],
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          CustomTextFormField(
+            title: 'Email',
+            hintText: 'Masukkan email-mu ya',
+            prefixIcon: AssetsIcon.user,
+            keyboardType: TextInputType.name,
+            controller: emailController,
+            validator: (value) {
+              value = value ?? "";
+
+              if (value.isEmptyWithTrim()) {
+                return ErrorMessage.required;
+              }
+
+              if (!value.isValidEmail()) {
+                return ErrorMessage.emailValid;
+              }
+
+              return null;
+            },
+          ),
+          SizedBox(height: 20.0),
+          CustomTextFormField(
+            title: 'Password',
+            hintText: 'Masukkan password-mu ya',
+            prefixIcon: AssetsIcon.password,
+            textInputAction: TextInputAction.done,
+            isPassword: true,
+            obscureText: true,
+            controller: passwordController,
+          ),
+        ],
+      ),
     );
+  }
+
+  void _onLogin() async {
+    if (!(_formKey.currentState?.validate() ?? true)) return;
+
+    final email = emailController.text;
+    final password = passwordController.text;
+
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+
+    Modal.showLoadingDialog(context, _keyLoader);
+
+    final response = await firebaseAuthProvider.signIn(
+      email: email,
+      password: password,
+    );
+
+    Navigator.of(_keyLoader.currentContext!, rootNavigator: true).pop();
+
+    if (!mounted) return;
+
+    if (response is DataSuccess) {
+      context.go(RoutePath.home);
+      Modal.showSnackBar(
+        context,
+        text: "Berhasil masuk",
+        snackbarType: SnackbarType.success,
+      );
+    } else {
+      final errorMessage =
+          response.error?.toString() ?? "Terjadi kesalahan, silakan coba lagi.";
+      Modal.showSnackBar(
+        context,
+        text: errorMessage,
+        snackbarType: SnackbarType.danger,
+      );
+    }
   }
 
   Widget _buildTitle() {

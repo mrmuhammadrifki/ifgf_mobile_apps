@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
@@ -38,6 +39,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         toolbarHeight: preferredSize.height,
         titleSpacing: 0,
         elevation: 0,
+        systemOverlayStyle: isDarkAppbar == true
+            ? SystemUiOverlayStyle.light 
+            : SystemUiOverlayStyle.dark, 
         title: Padding(
           padding: const EdgeInsets.only(right: 20, left: 5, bottom: 16),
           child: Row(

@@ -6,7 +6,14 @@ import 'package:ifgf_apps/core/utils/ext_text.dart';
 
 class FilterByCategory extends StatefulWidget {
   final List<String> list;
-  const FilterByCategory({super.key, required this.list});
+  final String? value;
+  final ValueChanged<String>? onChanged;
+  const FilterByCategory({
+    super.key,
+    required this.list,
+    this.value,
+    this.onChanged,
+  });
 
   @override
   State<FilterByCategory> createState() => _FilterByCategoryState();
@@ -18,7 +25,22 @@ class _FilterByCategoryState extends State<FilterByCategory> {
   @override
   void initState() {
     super.initState();
-    selectedValue = widget.list.first;
+    selectedValue = widget.value != null && widget.list.contains(widget.value)
+        ? widget.value ?? ""
+        : widget.list.first;
+  }
+
+  @override
+  void didUpdateWidget(covariant FilterByCategory oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.value != null &&
+        widget.value != oldWidget.value &&
+        widget.list.contains(widget.value)) {
+      setState(() {
+        selectedValue = widget.value!;
+      });
+    }
   }
 
   @override
@@ -44,9 +66,12 @@ class _FilterByCategoryState extends State<FilterByCategory> {
             fontWeight: FontWeight.w400,
           ),
           onChanged: (String? newValue) {
-            setState(() {
-              selectedValue = newValue;
-            });
+            if (newValue != null) {
+              setState(() {
+                selectedValue = newValue;
+              });
+              widget.onChanged?.call(newValue);
+            }
           },
           items: widget.list.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(

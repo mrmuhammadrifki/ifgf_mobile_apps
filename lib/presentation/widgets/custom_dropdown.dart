@@ -3,31 +3,58 @@ import 'package:flutter_svg/svg.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
+import 'package:ifgf_apps/presentation/pages/profile/provider/profile_provider.dart';
+import 'package:provider/provider.dart';
 
 class CustomDropdown extends StatefulWidget {
   final List<String> list;
   final String title;
-  const CustomDropdown({super.key, required this.list, required this.title});
+  final String? value;
+  final ValueChanged<String>? onChanged;
+
+  const CustomDropdown({
+    super.key,
+    required this.list,
+    required this.title,
+    this.value,
+    this.onChanged,
+  });
 
   @override
   State<CustomDropdown> createState() => _CustomDropdownState();
 }
 
 class _CustomDropdownState extends State<CustomDropdown> {
-  String? selectedValue;
+  late String selectedValue;
 
   @override
   void initState() {
     super.initState();
-    selectedValue = widget.list.first;
+    selectedValue = widget.value != null && widget.list.contains(widget.value)
+        ? widget.value ?? ""
+        : widget.list.first;
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomDropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.value != null &&
+        widget.value != oldWidget.value &&
+        widget.list.contains(widget.value)) {
+      setState(() {
+        selectedValue = widget.value!;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ProfileProvider>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text(widget.title).p14r(),
+        Text(widget.title).p14r(),
         const SizedBox(height: 6),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -39,7 +66,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           child: Row(
             children: [
               SvgPicture.asset(AssetsIcon.category),
-              SizedBox(width: 3),
+              const SizedBox(width: 3),
               Expanded(
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
@@ -52,11 +79,17 @@ class _CustomDropdownState extends State<CustomDropdown> {
                       fontWeight: FontWeight.w400,
                     ),
                     onChanged: (String? newValue) {
-                      setState(() {
-                        selectedValue = newValue;
-                      });
+                      if (provider.profile?.isAdmin ?? false) {
+                        if (newValue != null) {
+                          setState(() {
+                            selectedValue = newValue;
+                          });
+                          widget.onChanged?.call(newValue);
+                        }
+                      }
                     },
-                    items: widget.list.map<DropdownMenuItem<String>>((String value) {
+                    items: widget.list
+                        .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value).p16r().black2(),
