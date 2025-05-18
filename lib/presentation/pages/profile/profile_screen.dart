@@ -73,10 +73,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: _buildMenuItem(title: "Ubah Profil"),
                   ),
                   SizedBox(height: 8),
-                  InkWell(
-                    onTap: _onGoToKelolaNats,
-                    child: _buildMenuItem(title: "Kelola Nats"),
-                  ),
+                  if (detailProfileResponse.profile?.isAdmin == true)
+                    InkWell(
+                      onTap: _onGoToKelolaNats,
+                      child: _buildMenuItem(title: "Kelola Nats"),
+                    ),
                   SizedBox(height: 8),
                   InkWell(
                       onTap: () {
