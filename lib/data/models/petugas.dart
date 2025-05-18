@@ -1,5 +1,6 @@
 class Petugas {
   String? preacher;
+  String? worshipLeader;
   String? singer;
   String? keyboard;
   String? bas;
@@ -12,6 +13,7 @@ class Petugas {
 
   Petugas({
     this.preacher,
+    this.worshipLeader,
     this.singer,
     this.keyboard,
     this.bas,
@@ -26,6 +28,7 @@ class Petugas {
   Map<String, dynamic> toJson() {
     return {
       'preacher': preacher,
+      'worship_leader': worshipLeader,
       'singer': singer,
       'keyboard': keyboard,
       'bas': bas,
@@ -41,6 +44,7 @@ class Petugas {
   factory Petugas.fromMap(Map<String, dynamic> map) {
     return Petugas(
       preacher: map['preacher'] as String?,
+        worshipLeader: map['worship_leader'] as String?,
       singer: map['singer'] as String?,
       keyboard: map['keyboard'] as String?,
       bas: map['bas'] as String?,
@@ -56,6 +60,7 @@ class Petugas {
   Map<String, dynamic> toMap() {
     return {
       'preacher': preacher,
+       'worship_leader': worshipLeader,
       'singer': singer,
       'keyboard': keyboard,
       'bas': bas,
@@ -70,6 +75,6 @@ class Petugas {
 
   @override
   String toString() {
-    return 'Petugas(preacher: $preacher, singer: $singer, keyboard: $keyboard, bas: $bas, gitar: $gitar, drum: $drum, multimedia: $multimedia, dokumentasi: $dokumentasi, lcdOperator: $lcdOperator, lighting: $lighting)';
+    return 'Petugas(preacher: $preacher, worship_leader: $worshipLeader, singer: $singer, keyboard: $keyboard, bas: $bas, gitar: $gitar, drum: $drum, multimedia: $multimedia, dokumentasi: $dokumentasi, lcdOperator: $lcdOperator, lighting: $lighting)';
   }
 }

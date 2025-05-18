@@ -112,7 +112,7 @@ class _DetailJadwalState extends State<DetailJadwal> {
     }
   }
 
-   void _onGoToEditSuperSunday() async {
+  void _onGoToEditSuperSunday() async {
     final result = await context.push(
       RoutePath.createJadwalSuperSunday,
       extra: CreateAcaraParams(isEdit: true, id: widget.id ?? ""),
@@ -171,8 +171,8 @@ class _DetailJadwalState extends State<DetailJadwal> {
               ),
               SizedBox(height: 8),
               _buildPetugas(
-                job: "Singer",
-                names: item?.petugas?.singer ?? "",
+                job: "Worship Leader",
+                names: item?.petugas?.worshipLeader ?? "",
               ),
               SizedBox(height: 16),
               Text("Musik").p14m().black2(),
@@ -182,12 +182,17 @@ class _DetailJadwalState extends State<DetailJadwal> {
                 child: Column(
                   children: [
                     _buildPetugas(
+                      job: "Singer",
+                      names: item?.petugas?.singer ?? "",
+                    ),
+                    SizedBox(height: 8),
+                    _buildPetugas(
                       job: "Keyboard",
                       names: item?.petugas?.keyboard ?? "",
                     ),
                     SizedBox(height: 8),
                     _buildPetugas(
-                      job: "Bas",
+                      job: "Bass",
                       names: item?.petugas?.bas ?? "",
                     ),
                     SizedBox(height: 8),
@@ -235,36 +240,40 @@ class _DetailJadwalState extends State<DetailJadwal> {
               SizedBox(height: 24),
               Row(
                 children: [
-                  provider.profile?.isAdmin ?? false ? Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: BaseColor.red),
-                      onPressed: () async {
-                        final result = await Modal.showConfirmationDialog(
-                          context,
-                          title: "Hapus Jadwal",
-                          message:
-                              "Apakah anda yakin ingin menghapus jadwal ini?",
-                        );
+                  provider.profile?.isAdmin ?? false
+                      ? Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: BaseColor.red),
+                            onPressed: () async {
+                              final result = await Modal.showConfirmationDialog(
+                                context,
+                                title: "Hapus Jadwal",
+                                message:
+                                    "Apakah anda yakin ingin menghapus jadwal ini?",
+                              );
 
-                        if (result == true) {
-                          _onDeleteJadwal(item?.id);
-                        }
-                      },
-                      child: Text("Hapus"),
-                    ),
-                  ) : SizedBox(),
-                  SizedBox(width:  provider.profile?.isAdmin ?? false ? 8 : 0),
-                  provider.profile?.isAdmin ?? false ? Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: BaseColor.blue),
-                      onPressed: () {
-                        _onGoToEditSuperSunday();
-                      },
-                      child: Text("Edit"),
-                    ),
-                  ) : SizedBox(),
+                              if (result == true) {
+                                _onDeleteJadwal(item?.id);
+                              }
+                            },
+                            child: Text("Hapus"),
+                          ),
+                        )
+                      : SizedBox(),
+                  SizedBox(width: provider.profile?.isAdmin ?? false ? 8 : 0),
+                  provider.profile?.isAdmin ?? false
+                      ? Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: BaseColor.blue),
+                            onPressed: () {
+                              _onGoToEditSuperSunday();
+                            },
+                            child: Text("Edit"),
+                          ),
+                        )
+                      : SizedBox(),
                 ],
               )
             ],

@@ -57,7 +57,7 @@ class _CreateJadwalDiscipleshipJourneyState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.id?.isNotEmpty == true && widget.isEdit == true) {
         _onGetOneJadwal(id: widget.id);
-      } 
+      }
     });
   }
 
@@ -214,7 +214,8 @@ class _CreateJadwalDiscipleshipJourneyState
     final createJadwalProvider =
         context.read<CreateJadwalDiscipleshipJourneyProvider>();
 
-    final jenisDiscipleshipJourney = _selectedJenisDiscipleshipJourney ?? listDiscipleshipJourney.first;
+    final jenisDiscipleshipJourney =
+        _selectedJenisDiscipleshipJourney ?? listDiscipleshipJourney.first;
     final dateTime = _dates.first;
     final location = locationController.text;
     final thumbnail = createJadwalProvider.getThumbnail();
@@ -333,8 +334,8 @@ class _CreateJadwalDiscipleshipJourneyState
           ),
           SizedBox(height: 20),
           CustomTextFormField(
-            title: "Tanggal Jadwal",
-            hintText: "Pilih tanggal jadwal ya",
+            title: "Tanggal",
+            hintText: "Pilih tanggal ya",
             prefixIcon: AssetsIcon.calendar,
             isReadOnly: true,
             isPicker: true,

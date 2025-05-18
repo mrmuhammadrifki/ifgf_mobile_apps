@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ifgf_apps/config/routes/route_path.dart';
@@ -9,7 +7,9 @@ import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
 import 'package:ifgf_apps/core/utils/ext_text.dart';
 import 'package:ifgf_apps/core/utils/helper.dart';
+import 'package:ifgf_apps/presentation/pages/home/provider/home_provider.dart';
 import 'package:ifgf_apps/presentation/pages/profile/provider/profile_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,7 +73,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text("Shalom,").p16r().black2(),
                         Text("${detailProfileResponse.profile?.fullName} 👋")
                             .p24m(),
-                        SizedBox(height: 32),
+                        Consumer<HomeProvider>(
+                          builder: (context, provider, child) {
+                            return provider.natsResponse != null
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 14),
+                                      Text('"${provider.natsResponse?.isi ?? ''}"')
+                                          .p12r()
+                                          .black2(),
+                                      SizedBox(height: 4),
+                                      Text("– ${provider.natsResponse?.ayat ?? ""}")
+                                          .p12sb()
+                                          .black2(),
+                                    ],
+                                  )
+                                : SizedBox();
+                          },
+                        ),
+                        SizedBox(height: 20),
                         Row(
                           children: [
                             Expanded(
@@ -137,7 +157,14 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final provider = context.read<ProfileProvider>();
       provider.reload();
+      _onGetTodayNats();
     });
+  }
+
+  Future<void> _onGetTodayNats() async {
+    final provider = context.read<HomeProvider>();
+
+    await provider.getTodayNats();
   }
 
   void _onGoToKeuangan() {

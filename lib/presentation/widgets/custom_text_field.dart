@@ -27,7 +27,7 @@ class CustomTextFormField extends StatefulWidget {
   final Function()? onTap;
 
   const CustomTextFormField({
-    Key? key,
+    super.key,
     required this.title,
     required this.hintText,
     required this.controller,
@@ -45,7 +45,7 @@ class CustomTextFormField extends StatefulWidget {
     this.textInputAction = TextInputAction.next,
     this.isPicker = false,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();

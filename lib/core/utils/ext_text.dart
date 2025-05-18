@@ -76,6 +76,10 @@ extension TextExtension on Text {
   Text p12m() => copyWith(
         style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500),
       );
+
+       Text p12sb() => copyWith(
+        style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600),
+      );
   Text p12r() => copyWith(
         style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400),
       );

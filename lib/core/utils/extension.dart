@@ -68,19 +68,6 @@ extension DateFormatting on String {
       return this;
     }
   }
-
-  String get formattedDate2 {
-    try {
-      DateTime parsedDate = DateTime.parse(this);
-      return DateFormat("E, d MMM y").format(parsedDate);
-    } catch (e) {
-      return this;
-    }
-  }
-}
-
-extension DateTimeExt on DateTime {
-  String get formattedDate => DateFormat('d MMMM yyyy').format(this);
 }
 
 extension StringExt on String {

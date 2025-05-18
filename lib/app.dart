@@ -16,6 +16,7 @@ import 'package:ifgf_apps/data/data_sources/remote/firebase_auth_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/firebase_storage_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/jadwal_firestore_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/keuangan_firestore_service.dart';
+import 'package:ifgf_apps/data/data_sources/remote/nats_firestore_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/profile_firestore_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/register_firestore_service.dart';
 import 'package:ifgf_apps/presentation/pages/profile/provider/profile_provider.dart';
@@ -99,6 +100,11 @@ class _AppState extends State<App> {
         ),
         Provider(
           create: (context) => RegisterFirestoreService(
+            firebaseFirestore,
+          ),
+        ),
+        Provider(
+          create: (context) => NatsFirestoreService(
             firebaseFirestore,
           ),
         ),

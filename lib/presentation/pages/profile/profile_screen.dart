@@ -74,6 +74,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: 8),
                   InkWell(
+                    onTap: _onGoToKelolaNats,
+                    child: _buildMenuItem(title: "Kelola Nats"),
+                  ),
+                  SizedBox(height: 8),
+                  InkWell(
                       onTap: () {
                         Helper.openWhatsApp(
                           phoneNumber: "6281263175915",
@@ -141,6 +146,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
     );
+  }
+
+  void _onGoToKelolaNats() {
+    context.push(RoutePath.nats);
   }
 
   void _onGoToEditProfile({String? id}) async {

@@ -9,6 +9,7 @@ import 'package:ifgf_apps/data/data_sources/remote/firebase_auth_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/firebase_storage_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/jadwal_firestore_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/keuangan_firestore_service.dart';
+import 'package:ifgf_apps/data/data_sources/remote/nats_firestore_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/profile_firestore_service.dart';
 import 'package:ifgf_apps/data/data_sources/remote/register_firestore_service.dart';
 import 'package:ifgf_apps/data/models/create_acara_params.dart';
@@ -24,6 +25,8 @@ import 'package:ifgf_apps/presentation/pages/create_jadwak_icare/create_jadwal_i
 import 'package:ifgf_apps/presentation/pages/create_jadwak_icare/create_jadwal_icare_provider/create_jadwal_icare_provider.dart';
 import 'package:ifgf_apps/presentation/pages/create_jadwal_super_sunday/create_jadwal_super_sunday.dart';
 import 'package:ifgf_apps/presentation/pages/create_jadwal_super_sunday/create_jadwal_super_sunday_provider/create_jadwal_super_sunday_provider.dart';
+import 'package:ifgf_apps/presentation/pages/create_nats/create_nats_screen.dart';
+import 'package:ifgf_apps/presentation/pages/create_nats/provider/create_nats_provider.dart';
 import 'package:ifgf_apps/presentation/pages/create_trx/create_trx_screen.dart';
 import 'package:ifgf_apps/presentation/pages/create_trx/provider/create_trx_provider.dart';
 import 'package:ifgf_apps/presentation/pages/detail_jadwal/cubit/detail_jadwal_cubit.dart';
@@ -31,6 +34,7 @@ import 'package:ifgf_apps/presentation/pages/detail_jadwal/detail_jadwal.dart';
 import 'package:ifgf_apps/presentation/pages/detail_jadwal/provider/detail_jadwal_provider.dart';
 import 'package:ifgf_apps/presentation/pages/edit_profile/edit_profile_screen.dart';
 import 'package:ifgf_apps/presentation/pages/home/home_screen.dart';
+import 'package:ifgf_apps/presentation/pages/home/provider/home_provider.dart';
 import 'package:ifgf_apps/presentation/pages/jadwal/cubit/list_discipleship_journey_cubit.dart';
 import 'package:ifgf_apps/presentation/pages/jadwal/cubit/list_icare_cubit.dart';
 import 'package:ifgf_apps/presentation/pages/jadwal/cubit/list_super_sunday_cubit.dart';
@@ -45,6 +49,8 @@ import 'package:ifgf_apps/presentation/pages/login/login_screen.dart';
 import 'package:ifgf_apps/presentation/pages/member_discipleship_journey/cubit/list_member_discipleship_journey_cubit.dart';
 import 'package:ifgf_apps/presentation/pages/member_discipleship_journey/member_discipleship_journey_screen.dart';
 import 'package:ifgf_apps/presentation/pages/member_icare/member_icare_screen.dart';
+import 'package:ifgf_apps/presentation/pages/nats/cubit/list_nats_cubit.dart';
+import 'package:ifgf_apps/presentation/pages/nats/nats_screen.dart';
 import 'package:ifgf_apps/presentation/pages/profile/profile_screen.dart';
 import 'package:ifgf_apps/presentation/pages/register/register_screen.dart';
 import 'package:ifgf_apps/presentation/pages/register_auth/register_auth_screen.dart';
@@ -84,7 +90,15 @@ class Navigation {
         GoRoute(
           path: RoutePath.home,
           pageBuilder: (context, GoRouterState state) {
-            return _getPage(child: HomeScreen(), state: state);
+            return _getPage(
+                child: MultiProvider(providers: [
+                  ChangeNotifierProvider(
+                    create: (context) => HomeProvider(
+                      context.read<NatsFirestoreService>(),
+                    ),
+                  )
+                ], child: HomeScreen()),
+                state: state);
           },
         ),
       ],
@@ -206,17 +220,55 @@ class Navigation {
         );
       },
     ),
-     GoRoute(
+    GoRoute(
       path: RoutePath.tentangKami,
       pageBuilder: (context, GoRouterState state) {
         return _getPage(child: TentangKamiScreen(), state: state);
       },
     ),
-     GoRoute(
+    GoRoute(
       path: RoutePath.photoView,
       pageBuilder: (context, GoRouterState state) {
-          final image = state.extra as String;
+        final image = state.extra as String;
         return _getPage(child: PhotoViewPage(image: image), state: state);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.nats,
+      pageBuilder: (context, GoRouterState state) {
+        return _getPage(
+            child: MultiProvider(providers: [
+              BlocProvider(
+                create: (context) => ListNatsCubit(),
+              ),
+              ChangeNotifierProvider(
+                create: (context) => CreateNatsProvider(
+                  context.read<NatsFirestoreService>(),
+                ),
+              ),
+            ], child: NatsScreen()),
+            state: state);
+      },
+    ),
+    GoRoute(
+      path: RoutePath.createNats,
+      pageBuilder: (context, GoRouterState state) {
+        final params = state.extra as CreateAcaraParams;
+        return _getPage(
+            child: MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (context) => CreateNatsProvider(
+                    context.read<NatsFirestoreService>(),
+                  ),
+                ),
+              ],
+              child: CreateNatsScreen(
+                id: params.id,
+                isEdit: params.isEdit,
+              ),
+            ),
+            state: state);
       },
     ),
     GoRoute(

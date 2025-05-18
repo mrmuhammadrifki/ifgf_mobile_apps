@@ -29,6 +29,8 @@ base class AssetsIcon {
   static const String target = "assets/icons/ic_target.svg";
   static const String tiktok = "assets/icons/ic_tiktok.svg";
   static const String instagram = "assets/icons/ic_instagram.svg";
+  static const String book = "assets/icons/ic_book.svg";
+  static const String ayat = "assets/icons/ic_ayat.svg";
 }
 
 base class AssetsImage {

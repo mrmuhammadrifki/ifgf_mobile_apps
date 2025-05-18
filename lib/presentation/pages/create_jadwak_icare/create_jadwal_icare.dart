@@ -325,8 +325,8 @@ class _CreateJadwalIcareState extends State<CreateJadwalIcare> {
           ),
           SizedBox(height: 20),
           CustomTextFormField(
-            title: "Tanggal Jadwal",
-            hintText: "Pilih tanggal jadwal ya",
+            title: "Tanggal",
+            hintText: "Pilih tanggal ya",
             prefixIcon: AssetsIcon.calendar,
             isReadOnly: true,
             isPicker: true,

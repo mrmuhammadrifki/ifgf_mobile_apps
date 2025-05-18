@@ -23,5 +23,7 @@ base class RoutePath {
       '/registerDiscipleshipJourney';
   static const String editProfile = '/editProfile';
   static const String tentangKami = '/tentangKami';
-    static const String photoView = '/photoView';
+  static const String photoView = '/photoView';
+  static const String nats = '/nats';
+  static const String createNats = '/createNats';
 }

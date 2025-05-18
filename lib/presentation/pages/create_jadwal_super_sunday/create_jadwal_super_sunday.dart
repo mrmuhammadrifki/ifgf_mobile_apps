@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ifgf_apps/config/routes/route_path.dart';
 import 'package:ifgf_apps/config/themes/base_color.dart';
 import 'package:ifgf_apps/core/resources/data_state.dart';
 import 'package:ifgf_apps/core/utils/assets.dart';
@@ -38,6 +37,7 @@ class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
   final TextEditingController preacherController = TextEditingController();
+  final TextEditingController worshipLeaderController = TextEditingController();
   final TextEditingController singerController = TextEditingController();
   final TextEditingController keyboardController = TextEditingController();
   final TextEditingController basController = TextEditingController();
@@ -110,8 +110,8 @@ class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomTextFormField(
-            title: "Tanggal Jadwal",
-            hintText: "Pilih tanggal jadwal ya",
+            title: "Tanggal",
+            hintText: "Pilih tanggal ya",
             prefixIcon: AssetsIcon.calendar,
             isReadOnly: true,
             isPicker: true,
@@ -147,6 +147,13 @@ class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
           ),
           SizedBox(height: 20),
           CustomTextFormField(
+            title: "Worship Leader",
+            hintText: "Masukkan petugas worship leader ya",
+            prefixIcon: AssetsIcon.user,
+            controller: worshipLeaderController,
+          ),
+          SizedBox(height: 20),
+          CustomTextFormField(
             title: "Singer",
             hintText: "Masukkan petugas singer ya",
             prefixIcon: AssetsIcon.user,
@@ -161,8 +168,8 @@ class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
           ),
           SizedBox(height: 20),
           CustomTextFormField(
-            title: "Bas",
-            hintText: "Masukkan petugas bas ya",
+            title: "Bass",
+            hintText: "Masukkan petugas bass ya",
             prefixIcon: AssetsIcon.user,
             controller: basController,
           ),
@@ -284,6 +291,7 @@ class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
     final dateTime = _dates.first;
     final location = locationController.text;
     final preacher = preacherController.text;
+    final worshipLeader = worshipLeaderController.text;
     final singer = singerController.text;
     final keyboard = keyboardController.text;
     final bas = basController.text;
@@ -315,6 +323,7 @@ class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
         location: location,
         petugas: Petugas(
           preacher: preacher,
+          worshipLeader: worshipLeader,
           singer: singer,
           keyboard: keyboard,
           bas: bas,
@@ -367,6 +376,7 @@ class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
         location: location,
         petugas: Petugas(
           preacher: preacher,
+          worshipLeader: worshipLeader,
           singer: singer,
           keyboard: keyboard,
           bas: bas,
@@ -527,6 +537,8 @@ class _CreateJadwalSuperSundayState extends State<CreateJadwalSuperSunday> {
 
     if (response is DataSuccess) {
       preacherController.text = response.data?.petugas?.preacher ?? "";
+      worshipLeaderController.text =
+          response.data?.petugas?.worshipLeader ?? "";
       singerController.text = response.data?.petugas?.singer ?? "";
       keyboardController.text = response.data?.petugas?.keyboard ?? "";
       basController.text = response.data?.petugas?.bas ?? "";
