@@ -174,6 +174,11 @@ class _DetailJadwalState extends State<DetailJadwal> {
                 job: "Worship Leader",
                 names: item?.petugas?.worshipLeader ?? "",
               ),
+              SizedBox(height: 8),
+              _buildPetugas(
+                job: "Singer",
+                names: item?.petugas?.singer ?? "",
+              ),
               SizedBox(height: 16),
               Text("Musik").p14m().black2(),
               SizedBox(height: 8),
@@ -181,11 +186,6 @@ class _DetailJadwalState extends State<DetailJadwal> {
                 padding: const EdgeInsets.only(left: 16.0),
                 child: Column(
                   children: [
-                    _buildPetugas(
-                      job: "Singer",
-                      names: item?.petugas?.singer ?? "",
-                    ),
-                    SizedBox(height: 8),
                     _buildPetugas(
                       job: "Keyboard",
                       names: item?.petugas?.keyboard ?? "",
